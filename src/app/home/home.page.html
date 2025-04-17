@@ -1,20 +1,74 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Blank
+      {{ appName }}
     </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="refreshEmployees()" [attr.aria-label]="'Refresh employee list'">
+        <ion-icon name="refresh-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-searchbar 
+    (ionInput)="handleSearch($event)"
+    placeholder="Search employees..."
+    [attr.aria-label]="'Search employees'"
+    debounce="300"
+    animated>
+  </ion-searchbar>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+  <ion-list [attr.aria-label]="'Employee list'">
+    <ion-item *ngIf="filteredEmployees.length === 0" role="status">
+      <ion-label class="ion-text-center">
+        {{ isLoading ? 'Loading employees...' : 'No employees found' }}
+      </ion-label>
+    </ion-item>
+
+    <ion-item-sliding *ngFor="let employee of filteredEmployees; trackBy: trackByFn">
+      <ion-item [routerLink]="['/employee-details', employee.id]" detail="true">
+        <ion-avatar slot="start">
+          <ion-icon size="large" name="person-circle-outline" [attr.aria-hidden]="true"></ion-icon>
+        </ion-avatar>
+        <ion-label>
+          <h2>{{employee.name}}</h2>
+          <p>{{employee.department}} - {{employee.position}}</p>
+          <p *ngIf="employee.email">{{employee.email}}</p>
+        </ion-label>
+      </ion-item>
+
+      <ion-item-options side="end">
+        <ion-item-option 
+          color="primary" 
+          [routerLink]="['/employee-details', employee.id]"
+          [attr.aria-label]="'Edit ' + employee.name">
+          <ion-icon slot="icon-only" name="create-outline" [attr.aria-hidden]="true"></ion-icon>
+        </ion-item-option>
+        <ion-item-option 
+          color="danger" 
+          (click)="deleteEmployee(employee.id)"
+          [attr.aria-label]="'Delete ' + employee.name">
+          <ion-icon slot="icon-only" name="trash-outline" [attr.aria-hidden]="true"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button 
+      routerLink="/employee-details"
+      [attr.aria-label]="'Add new employee'">
+      <ion-icon name="add-outline" [attr.aria-hidden]="true"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-loading 
+    [isOpen]="isLoading" 
+    message="Please wait..." 
+    [spinner]="'circular'"
+    [duration]="10000"
+    role="progressbar">
+  </ion-loading>
 </ion-content>

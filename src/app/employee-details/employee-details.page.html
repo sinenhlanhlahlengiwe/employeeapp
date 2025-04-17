@@ -1,0 +1,106 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home" [attr.aria-label]="'Go back to employee list'"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ isNew ? 'Add Employee' : 'Edit Employee' }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <form #employeeForm="ngForm" (ngSubmit)="saveEmployee(employeeForm)" novalidate>
+    <ion-list>
+      <ion-item [class.ion-invalid]="nameInput.invalid && (nameInput.dirty || nameInput.touched)">
+        <ion-label position="floating">Name *</ion-label>
+        <ion-input 
+          #nameInput="ngModel"
+          type="text" 
+          [(ngModel)]="employee.name" 
+          name="name" 
+          required
+          minlength="2"
+          maxlength="50"
+          [attr.aria-label]="'Employee name'"
+          [attr.aria-required]="true">
+        </ion-input>
+        <ion-note color="danger" *ngIf="nameInput.invalid && (nameInput.dirty || nameInput.touched)" role="alert">
+          <span *ngIf="nameInput.errors?.['required']">Name is required</span>
+          <span *ngIf="nameInput.errors?.['minlength']">Name must be at least 2 characters</span>
+        </ion-note>
+      </ion-item>
+
+      <ion-item [class.ion-invalid]="departmentInput.invalid && (departmentInput.dirty || departmentInput.touched)">
+        <ion-label position="floating">Department *</ion-label>
+        <ion-input 
+          #departmentInput="ngModel"
+          type="text" 
+          [(ngModel)]="employee.department" 
+          name="department" 
+          required
+          [attr.aria-label]="'Employee department'"
+          [attr.aria-required]="true">
+        </ion-input>
+        <ion-note color="danger" *ngIf="departmentInput.invalid && (departmentInput.dirty || departmentInput.touched)" role="alert">
+          Department is required
+        </ion-note>
+      </ion-item>
+
+      <ion-item [class.ion-invalid]="positionInput.invalid && (positionInput.dirty || positionInput.touched)">
+        <ion-label position="floating">Position *</ion-label>
+        <ion-input 
+          #positionInput="ngModel"
+          type="text" 
+          [(ngModel)]="employee.position" 
+          name="position" 
+          required
+          [attr.aria-label]="'Employee position'"
+          [attr.aria-required]="true">
+        </ion-input>
+        <ion-note color="danger" *ngIf="positionInput.invalid && (positionInput.dirty || positionInput.touched)" role="alert">
+          Position is required
+        </ion-note>
+      </ion-item>
+
+      <ion-item [class.ion-invalid]="!isFormValid && emailInput.dirty">
+        <ion-label position="floating">Email</ion-label>
+        <ion-input 
+          #emailInput="ngModel"
+          type="email" 
+          [(ngModel)]="employee.email" 
+          name="email"
+          [attr.aria-label]="'Employee email'"
+          (ionInput)="validateEmail($event)">
+        </ion-input>
+        <ion-note color="danger" *ngIf="!isFormValid && emailInput.dirty" role="alert">
+          Please enter a valid email address
+        </ion-note>
+      </ion-item>
+
+      <ion-item [class.ion-invalid]="!isFormValid && phoneInput.dirty">
+        <ion-label position="floating">Phone</ion-label>
+        <ion-input 
+          #phoneInput="ngModel"
+          type="tel" 
+          [(ngModel)]="employee.phone" 
+          name="phone"
+          maxlength="10"
+          [attr.aria-label]="'Employee phone number'"
+          (ionInput)="validatePhone($event)">
+        </ion-input>
+        <ion-note color="danger" *ngIf="!isFormValid && phoneInput.dirty" role="alert">
+          Please enter a valid 10-digit phone number
+        </ion-note>
+      </ion-item>
+    </ion-list>
+
+    <div class="ion-padding">
+      <ion-button 
+        expand="block" 
+        type="submit" 
+        [disabled]="!employeeForm.valid || !isFormValid"
+        [attr.aria-label]="isNew ? 'Add new employee' : 'Update employee details'">
+        {{ isNew ? 'Add Employee' : 'Update Employee' }}
+      </ion-button>
+    </div>
+  </form>
+</ion-content>

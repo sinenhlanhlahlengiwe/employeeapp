@@ -1,0 +1,28 @@
+ion-list {
+    background: transparent;
+  }
+  
+  ion-item {
+    --background: #ffffff;
+    margin-bottom: 8px;
+    --border-radius: 8px;
+    --highlight-height: 0;
+    
+    &.item-has-focus {
+      --highlight-background: var(--ion-color-primary);
+    }
+  }
+  
+  ion-button {
+    margin-top: 24px;
+    --border-radius: 8px;
+  }
+  
+  form {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .required {
+    color: var(--ion-color-danger);
+  }

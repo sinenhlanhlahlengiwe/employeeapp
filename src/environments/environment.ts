@@ -3,7 +3,14 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  appName: 'Employee Manager',
+  version: '1.0.0',
+  storageKey: 'employees-db',
+  apiTimeout: 10000, // milliseconds
+  maxSearchResults: 50,
+  defaultDateFormat: 'MMM d, yyyy',
+  minSearchLength: 2
 };
 
 /*
